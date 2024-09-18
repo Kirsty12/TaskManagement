@@ -1,0 +1,27 @@
+@page
+@model TaskManagementSystem.Pages.Tasks.CreateModel
+
+<h2>Create Task</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="TaskItem.Title" class="control-label"> Title: </label>
+        <input asp-for="TaskItem.Title" class="form-control" id="TaskTitle" />
+        <small<span asp-validation-for="TaskItem.Title" class="text-danger">*Required Field</span></small>
+        <br />
+    </div>
+    <div class="form-group">
+        <label asp-for="TaskItem.DueDate" class="control-label"> Due Date: </label>
+        <input asp-for="TaskItem.DueDate" class="form-control" id="TaskDue"/>
+        <br />
+    </div>
+    <div class="form-check">
+        <label asp-for="TaskItem.IsComplete" class="control-label"> Is Task Complete? </label> <br />
+        <input type="radio" asp-for="TaskItem.IsComplete" value="False" checked="checked" /> No <br />
+        <input type="radio" asp-for="TaskItem.IsComplete" value="True"/> Yes <br />
+         <br />
+    </div>
+   
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+

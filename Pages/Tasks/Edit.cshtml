@@ -1,0 +1,28 @@
+@page
+@model TaskManagementSystem.Pages.Tasks.EditModel
+
+<h2>Edit / Update Task</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="TaskItem.Id" />
+
+    <div class="form-group">
+        <label asp-for="TaskItem.Title" class="control-label"></label>
+        <input asp-for="TaskItem.Title" class="form-control" />
+        <span asp-validation-for="TaskItem.Title" class="text-danger"></span>
+        <br />
+    </div>
+    <div class="form-group">
+        <label asp-for="TaskItem.DueDate" class="control-label"></label>
+        <input asp-for="TaskItem.DueDate" class="form-control" />
+        <span asp-validation-for="TaskItem.DueDate" class="text-danger"></span>
+        <br />
+    </div>
+    <div class="form-check">
+        <label asp-for="TaskItem.IsComplete" class="control-label"> Is Task Complete? </label> <br />
+        <input type="radio" asp-for="TaskItem.IsComplete" value="False" /> No <br />
+        <input type="radio" asp-for="TaskItem.IsComplete" value="True"/> Yes <br />
+        <br />
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>

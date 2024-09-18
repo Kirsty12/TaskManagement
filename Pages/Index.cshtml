@@ -1,0 +1,115 @@
+@page
+@model TaskManagementSystem.Pages.IndexModel
+<head>
+<!-- Bootstrap CSS (if not already included) -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+<!-- Bootstrap Calendar CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-calendar/1.3.1/css/bootstrap-calendar.min.css" rel="stylesheet">
+<!-- jQuery (required by Bootstrap Calendar) -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<!-- Bootstrap JavaScript (if not already included) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Bootstrap Calendar JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-calendar/1.3.1/js/bootstrap-calendar.min.js"></script>
+
+<link href="~/css/site.css" rel="stylesheet" />
+</head>
+
+<body>
+<h2>Task List</h2>
+
+
+<div class="container col-12 align-middle">
+    <div class="col-12 form-inline">
+        <form method="get" class="form-inline col-11">
+                <input type="text" id="searchString" name="searchString" class="form-control col-11" 
+                  value="@Model.SearchString" placeholder="Type to search..." />
+            <button type="submit" class="btn btn-primary search-button mb-2">
+                <i class="fa fa-search"></i> <!-- search icon -->
+            </button>
+        </form>
+    </div>
+    <br />
+
+    <div class="col-12 form-inline">
+        <form method="get" class="form-inline col-11">
+                <label for="completionStatus">Filter by Completion Status:</label>
+                <select id="completionStatus" name="completionStatus" class="form-control col-11">
+                    <option value="all" selected="@(Model.CompletionStatus == "all" ? "selected" : null)">All</option>
+                    <option value="completed" selected="@(Model.CompletionStatus == "completed" ? "selected" : null)">Completed</option>
+                    <option value="incomplete" selected="@(Model.CompletionStatus == "incomplete" ? "selected" : null)">Incomplete</option>
+                </select>
+            <button type="submit" class="btn btn-primary filter-button">
+                <i class="fa fa-filter"></i> <!-- filter icon -->
+            </button>  
+        </form>
+    </div>
+    
+    <br />
+    <!--Button for creating new task - directs to create page when clicked-->
+    <div>
+       <a class="btn btn-primary col-2 d-flex justify-content-center align-items-center" asp-page="Tasks/Create">Create New Task</a>
+    </div>
+    <br />
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Due Date</th>
+                <th>Is Complete</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var task in Model.TaskItems)
+            {
+                <tr class="@((task.IsComplete ? "task-complete" : ""))">
+                    
+                    <td>@task.Title</td>
+                    <td>@task.DueDate.ToShortDateString()</td>
+                    <td>
+                         @if (task.IsComplete)
+                        {
+                        <i class="fas fa-check-circle text-success"></i> <!-- Green tick icon -->
+                        }
+                    </td>
+                    <td>
+                        <a asp-page="Tasks/Edit" asp-route-id="@task.Id">Edit</a> |
+                        <a asp-page="Tasks/Delete" asp-route-id="@task.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<br>
+
+<div class="container">
+<h2>Task Calendar</h2>
+
+<!-- Calendar container -->
+<div id="calendar"></div>
+</div>
+
+</body>
+@section Scripts {
+    <!-- Initialise the calendar and fetch events -->
+    <script>
+        $(document).ready(function () {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: '/Index?handler=GetTasksForCalendar', // Your API endpoint to load tasks
+            editable: true,
+            selectable: true
+        });
+        calendar.render();
+    });
+    </script>
+}
+
+
+
